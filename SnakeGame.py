@@ -27,6 +27,14 @@ screen_height = 400
 white = (255, 255, 255)
 red = (255,0,77)
 black = (0, 0, 0)
+gameName = (255, 0, 77)
+enterToPlay = (0,181,184)
+quitGame = (254, 225, 26)
+scoreHighScore = (254, 225, 26)
+gameOver = (255, 0, 77)
+enterToContinue = (90, 39, 193)
+qToQuit = (39, 159, 0)
+food = (255, 0, 77)
 
 gameWindow = pygame.display.set_mode((screen_width, screen_height))  #   set game window size to 600 x 400
 
@@ -37,6 +45,10 @@ backgroundImage = pygame.transform.scale(backgroundImage, (screen_width, screen_
 # Game Title
 pygame.display.set_caption("Snake Game")    #   set game name to Snake Game
 pygame.display.update()
+
+#   game icon
+icon = pygame.image.load("images/icon.png")
+pygame.display.set_icon(icon)
 
 #   game font
 font = pygame.font.SysFont(None, 30)
@@ -52,7 +64,7 @@ def text_screen(text, color, x, y):
 
 #   determine length size
 def plot_snake(gameWindow, color, snk_list, snake_size):
-    print(snk_list)
+    #   print(snk_list)
     for x, y in snk_list:
         pygame.draw.rect(gameWindow, color, [x, y, snake_size, snake_size]) 
 
@@ -71,14 +83,14 @@ def welcome():
         welcomeImage = pygame.transform.scale(welcomeImage, (screen_width, screen_height)).convert_alpha()
         
         gameWindow.blit(welcomeImage, (0, 0))
-        text_screen("Snake Game By Montasim", (255,0,77), 170, 10)
-        text_screen("Press Space Bar To Play", (255,0,77), 170, 342)
-        text_screen("Press Q to Quit", (254,225,26), 215, 376)
+        text_screen("Snake Game By Montasim", gameName, 170, 10)
+        text_screen("Press Enter To Play", enterToPlay, 200, 342)
+        text_screen("Press Q to Quit", quitGame, 215, 376)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit_game = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_RETURN:
                     gameloop()
                 
                 if event.key == pygame.K_Q:
@@ -138,10 +150,10 @@ def gameloop():
                 f.close()
 
             gameWindow.fill(black)
-            text_screen("Score: " + str(score) + ", High Score: " + str(hiScore), white, 170, 150)
-            text_screen("Game Over!", red, 240, 175)
-            text_screen("Press Enter To Continue", (90,39,193), 180, 200)
-            text_screen("Press Q To Quit", (39,159,0), 225, 225)
+            text_screen("Score: " + str(score) + ", High Score: " + str(hiScore), scoreHighScore, 170, 150)
+            text_screen("Game Over!", gameOver, 240, 175)
+            text_screen("Press Enter To Continue", enterToContinue, 180, 200)
+            text_screen("Press Q To Quit", qToQuit, 225, 225)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -155,7 +167,7 @@ def gameloop():
                             quit()
 
                 
-                print(event)  #   prints all event in the game
+                #   print(event)  #   prints all event in the game
 
         else:
             for event in pygame.event.get():
@@ -199,8 +211,8 @@ def gameloop():
 
             gameWindow.fill(white)
             gameWindow.blit(backgroundImage, (0, 0))
-            text_screen("Score: " + str(score) + ", High Score: " + str(hiScore), (239,79,145), 155, 5)
-            pygame.draw.rect(gameWindow, (255,215,0), [food_x, food_y, snake_size, snake_size])
+            text_screen("Score: " + str(score) + ", High Score: " + str(hiScore), scoreHighScore, 155, 5)
+            pygame.draw.rect(gameWindow, food, [food_x, food_y, snake_size, snake_size])
 
             head = []
             head.append(snake_x)
@@ -222,14 +234,14 @@ def gameloop():
             #   if snake touch border game over
             if snake_x < 0 or snake_x > screen_width or snake_y < 0 or snake_y > screen_height:
                 game_over = True
-                print("Game Over")
+                #   print("Game Over")
 
                 #   game over music
                 pygame.mixer.music.load('sounds/gameover.mp3')
                 pygame.mixer.music.play()
 
             # pygame.draw.rect(gameWindow, black, [snake_x, snake_y, snake_size, snake_size])
-            plot_snake(gameWindow, (138,43,226), snk_list, snake_size)
+            plot_snake(gameWindow, black, snk_list, snake_size)
             
         pygame.display.update()
         clock.tick(fps)
